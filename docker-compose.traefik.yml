@@ -7,7 +7,7 @@ services:
       - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=traefik-public
+      - --providers.docker.network=deploy-net
       - --providers.file.filename=/etc/traefik/traefik.yml
       - --entrypoints.web.address=:80
     ports:
@@ -16,3 +16,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./dynamic_conf.yml:/etc/traefik/dynamic_conf.yml

@@ -1,5 +1,6 @@
 api:
     dashboard: true
+    insecure: true
 
 entryPoints:
     web:
@@ -10,8 +11,6 @@ providers:
         endpoint: "unix:///var/run/docker.sock"
         exposedByDefault: false
         network: "deploy-net"
-    file:
-        filename: /etc/traefik/dynamic_conf.yml
 
 http:
     routers:

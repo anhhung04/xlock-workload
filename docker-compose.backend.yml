@@ -8,8 +8,8 @@ services:
     image: ghcr.io/w-crew/xlock-core:latest
     container_name: xlock-backend
     restart: unless-stopped
-    ports:
-      - "${PORT:-8000}:${PORT:-8000}"
+    # ports:
+    #   - "${PORT:-8000}:${PORT:-8000}"
     environment:
       <<: *postgres-env
       REDIS_URL: redis://xlock-redis:6379
@@ -26,8 +26,8 @@ services:
     restart: unless-stopped
     environment:
       <<: *postgres-env
-    ports:
-      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    # ports:
+    #   - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -35,8 +35,8 @@ services:
   redis:
     image: redis:6
     restart: unless-stopped
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
+    # ports:
+    #   - "${REDIS_PORT:-6379}:6379"
     networks:
       - internal
 volumes:

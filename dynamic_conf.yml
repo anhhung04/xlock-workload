@@ -1,1 +1,19 @@
-#For dynamic configuration
+http:
+    routers:
+        frontend-router: # Default router for frontend
+            rule: "PathPrefix(`/`) && !PathPrefix(`/api`)"
+            entryPoints: ["web"]
+            service: frontend-service
+        backend-router:
+            rule: "PathPrefix(`/api`)" # Backend router for paths starting with /api
+            entryPoints: ["web"]
+            service: backend-service
+    services:
+        frontend-service:
+            loadBalancer:
+                servers:
+                    - url: "http://xlock-frontend:80"
+        backend-service:
+            loadBalancer:
+                servers:
+                    - url: "http://xlock-backend:8000"

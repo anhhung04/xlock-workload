@@ -1,0 +1,34 @@
+api:
+    dashboard: true
+
+entryPoints:
+    web:
+        address: ":80"
+
+providers:
+    docker:
+        endpoint: "unix:///var/run/docker.sock"
+        exposedByDefault: false
+        network: "deploy-net"
+    file:
+        filename: /etc/traefik/dynamic_conf.yml
+
+http:
+    routers:
+        frontend-router: # Default router for frontend
+            rule: "PathPrefix(`/`) && !PathPrefix(`/api`)"
+            entryPoints: ["web"]
+            service: frontend-service
+        backend-router:
+            rule: "PathPrefix(`/api`)" # Backend router for paths starting with /api
+            entryPoints: ["web"]
+            service: backend-service
+    services:
+        frontend-service:
+            loadBalancer:
+                servers:
+                    - url: "http://xlock-frontend:80"
+        backend-service:
+            loadBalancer:
+                servers:
+                    - url: "http://xlock-backend:8000"

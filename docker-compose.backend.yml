@@ -1,0 +1,50 @@
+x-postgres-env: &postgres-env
+  POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+  POSTGRES_DB: ${POSTGRES_DB:-postgres}
+
+services:
+  app:
+    image: ghcr.io/w-crew/xlock-core:latest
+    container_name: xlock-backend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      <<: *postgres-env
+      REDIS_URL: redis://xlock-redis:6379
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      PORT: ${PORT:-8000}
+    networks:
+      deploy-net:
+        aliases:
+          - xlock-backend
+      internal:
+  postgres:
+    image: postgres:13
+    restart: unless-stopped
+    environment:
+      <<: *postgres-env
+    ports:
+      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+  redis:
+    image: redis:6
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - internal
+volumes:
+  postgres_data:
+
+
+networks:
+  deploy-net:
+    external: true
+  internal:
+    external: false

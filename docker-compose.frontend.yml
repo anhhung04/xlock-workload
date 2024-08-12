@@ -1,0 +1,15 @@
+services:
+        app:
+                image: ghcr.io/w-crew/xlock-app:latest
+                container_name: xlock-frontend
+                restart: unless-stopped
+                environment:
+                        NODE_ENV: production   
+                networks:
+                        deploy-net:
+                                aliases:
+                                        - xlock-frontend
+
+networks:
+        deploy-net:
+                external: true
